@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jio AI Calling — Daily Tracker</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f4; --bg3: #eeece6;
+    --text: #1a1a18; --text2: #5f5e5a; --text3: #888780;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --success-bg: #eaf3de; --success-text: #3b6d11;
+    --danger-bg: #fcebeb; --danger-text: #a32d2d;
+    --warn-bg: #faeeda; --warn-text: #854f0b;
+    --info-bg: #e6f1fb; --info-text: #185fa5;
+    --radius: 8px; --radius-lg: 12px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a; --bg2: #252523; --bg3: #2e2e2b;
+      --text: #e8e6df; --text2: #a8a69f; --text3: #6e6c67;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+      --success-bg: #173404; --success-text: #c0dd97;
+      --danger-bg: #501313; --danger-text: #f09595;
+      --warn-bg: #412402; --warn-text: #fac775;
+      --info-bg: #042c53; --info-text: #85b7eb;
+    }
+  }
+  body { background: var(--bg3); font-family: var(--font); color: var(--text); font-size: 14px; min-height: 100vh; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 48px; }
+  .top-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .top-bar h1 { font-size: 17px; font-weight: 500; flex: 1; color: var(--text); }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: var(--radius); background: var(--success-bg); color: var(--success-text); display: flex; align-items: center; gap: 4px; }
+  .date-label { font-size: 12px; color: var(--text3); }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .filters select { font-size: 13px; padding: 7px 12px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); cursor: pointer; outline: none; }
+  .filters select:focus { border-color: #185fa5; }
+  .sec-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; margin-top: 24px; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .mc { background: var(--bg2); border-radius: var(--radius); padding: 14px 16px; position: relative; }
+  .mc .lbl { font-size: 11px; color: var(--text3); margin-bottom: 6px; line-height: 1.35; }
+  .mc .val { font-size: 23px; font-weight: 500; color: var(--text); line-height: 1; }
+  .mc .bm { font-size: 11px; color: var(--text3); margin-top: 5px; }
+  .mc .dot { width: 7px; height: 7px; border-radius: 50%; position: absolute; top: 14px; right: 14px; }
+  .dg { background: #639922; } .dr { background: #e24b4a; } .da { background: #ba7517; }
+  .cc { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; }
+  .cc h3 { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 14px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+  .funnel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .flbl { font-size: 12px; color: var(--text3); width: 100px; flex-shrink: 0; text-align: right; }
+  .fbar-wrap { flex: 1; background: var(--bg2); border-radius: 4px; height: 28px; overflow: hidden; }
+  .fbar { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+  .fcount { font-size: 12px; font-weight: 500; }
+  .fdrop { font-size: 11px; color: var(--text3); width: 52px; flex-shrink: 0; text-align: right; }
+  .gg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+  .gi { text-align: center; }
+  .gi .gv { font-size: 20px; font-weight: 500; }
+  .gi .gl { font-size: 11px; color: var(--text3); margin-top: 3px; line-height: 1.3; }
+  .dtbar { height: 10px; background: var(--bg2); border-radius: 5px; overflow: hidden; margin: 8px 0 5px; }
+  .dtfill { height: 100%; border-radius: 5px; background: #185fa5; }
+  .pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+  .pg { background: #eaf3de; color: #3b6d11; }
+  .pr { background: #fcebeb; color: #a32d2d; }
+  .pa { background: #faeeda; color: #854f0b; }
+  .pb { background: #e6f1fb; color: #185fa5; }
+  table { width: 100%; border-collapse: collapse; }
+  th { color: var(--text3); font-weight: 400; text-align: left; padding: 0 8px 8px 0; border-bottom: 0.5px solid var(--border); font-size: 12px; }
+  td { padding: 8px 8px 8px 0; border-bottom: 0.5px solid var(--border); color: var(--text); vertical-align: middle; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  .sev { font-size: 11px; padding: 2px 8px; border-radius: 20px; display: inline-block; font-weight: 500; }
+  .sev-h { background: #fcebeb; color: #a32d2d; }
+  .sev-m { background: #faeeda; color: #854f0b; }
+  .sev-l { background: #eaf3de; color: #3b6d11; }
+  .summary-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin: 5px 0 2px; }
+  .obj-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .obj-label { font-size: 12px; color: var(--text); width: 200px; flex-shrink: 0; }
+  .obj-bar-wrap { flex: 1; background: var(--bg2); border-radius: 3px; height: 7px; overflow: hidden; }
+  .obj-bar { height: 100%; border-radius: 3px; background: #378add; }
+  .obj-count { font-size: 12px; color: var(--text3); width: 44px; text-align: right; flex-shrink: 0; }
+  .footer { font-size: 11px; color: var(--text3); text-align: right; padding-top: 8px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-bar">
+    <h1><i class="ti ti-phone-call" style="font-size:18px;vertical-align:-3px;margin-right:6px"></i>Jio AI calling — daily tracker</h1>
+    <div class="badge"><i class="ti ti-refresh" style="font-size:13px"></i> Live · refreshed 2 min ago</div>
+    <span class="date-label" id="today-date"></span>
+  </div>
+
+  <div class="filters">
+    <select><option>All cohorts</option><option>Mobility base (DTH/Cable)</option><option>Lapsed leads</option><option>New serviceability area</option><option>Terminated JioHome</option><option>Lead page bounce</option><option>JioHotstar CTV</option><option>Smart society / RWA</option></select>
+    <select><option>Today</option><option>Yesterday</option><option>Last 7 days</option><option>Last 30 days</option></select>
+    <select><option>All stages</option><option>Stage 1 — Cold</option><option>Stage 2 — Warm</option><option>Stage 3 — Interested</option></select>
+  </div>
+
+  <div class="sec-label" style="margin-top:0">Funnel health</div>
+  <div class="cards-grid">
+    <div class="mc"><div class="dot dr"></div><div class="lbl">Connection rate</div><div class="val">61.4%</div><div class="bm">Target &gt;65%</div></div>
+    <div class="mc"><div class="dot dr"></div><div class="lbl">Interest rate</div><div class="val">23.8%</div><div class="bm">Target &gt;25%</div></div>
+    <div class="mc"><div class="dot dg"></div><div class="lbl">Slot booking rate</div><div class="val">83.2%</div><div class="bm">Target &gt;80%</div></div>
+    <div class="mc"><div class="dot da"></div><div class="lbl">Avg attempts to connect</div><div class="val">2.3</div><div class="bm">Track per cohort</div></div>
+  </div>
+
+  <div class="cc">
+    <h3>Today's call funnel</h3>
+    <div id="funnel-wrap"></div>
+  </div>
+
+  <div class="two-col">
+    <div class="cc" style="margin-bottom:0">
+      <h3>Call quality</h3>
+      <div class="gg">
+        <div class="gi"><div class="gv" style="color:#185fa5">96.1%</div><div class="gl">Completion rate<br><span style="color:#3b6d11;font-size:10px">▲ &gt;95%</span></div></div>
+        <div class="gi"><div class="gv" style="color:#185fa5">104s</div><div class="gl">Avg duration (interested)<br><span style="color:#3b6d11;font-size:10px">▲ &gt;90s</span></div></div>
+        <div class="gi"><div class="gv" style="color:#a32d2d">12.4%</div><div class="gl">Early hang-up rate<br><span style="color:#3b6d11;font-size:10px">▼ &lt;15%</span></div></div>
+      </div>
+      <div style="position:relative;height:150px"><canvas id="qualityChart"></canvas></div>
+      <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:var(--text3)">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;border-radius:2px;background:#185fa5;display:inline-block"></span>Completion %</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;border-top:2px dashed #e24b4a;display:inline-block"></span>Early hang-up %</span>
+      </div>
+    </div>
+    <div class="cc" style="margin-bottom:0">
+      <h3>Sentiment &amp; daily capacity</h3>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="font-size:22px;font-weight:500;color:#3b6d11">27.3%</span><span style="font-size:12px;color:var(--text3)">positive sentiment</span></div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:16px">Target &gt;25% · <span style="color:#3b6d11">on track</span></div>
+      <div style="position:relative;height:80px"><canvas id="sentChart"></canvas></div>
+      <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--text3);flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#639922;display:inline-block"></span>Positive 27%</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#b4b2a9;display:inline-block"></span>Neutral 43%</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#e24b4a;display:inline-block"></span>Negative 30%</span>
+      </div>
+      <div style="border-top:0.5px solid var(--border);margin-top:14px;padding-top:14px">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:6px">Daily calls vs target</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text);margin-bottom:4px"><span>9,820 placed</span><span>10,500 target</span></div>
+        <div class="dtbar"><div class="dtfill" style="width:93.5%"></div></div>
+        <div style="font-size:11px;color:var(--text3)">93.5% of plan · <span style="color:#3b6d11">on track</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">Call summary</div>
+
+  <div class="cc">
+    <h3>Outcome breakdown by cohort</h3>
+    <table><thead><tr><th>Cohort</th><th>Total calls</th><th style="color:#3b6d11">Positive</th><th style="color:#888780">Neutral</th><th style="color:#a32d2d">Negative</th><th>Split</th></tr></thead><tbody id="summary-body"></tbody></table>
+  </div>
+
+  <div class="two-col">
+    <div class="cc" style="margin-bottom:0"><h3>Top objection codes</h3><div id="obj-wrap"></div></div>
+    <div class="cc" style="margin-bottom:0">
+      <h3>Call disposition breakdown</h3>
+      <div style="position:relative;height:200px;margin-bottom:10px"><canvas id="dispChart"></canvas></div>
+      <div id="disp-legend" style="font-size:11px;display:flex;flex-wrap:wrap;gap:8px;color:var(--text3)"></div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:12px">
+    <div class="cc" style="margin-bottom:0"><h3>Avg handle time by outcome</h3><div style="position:relative;height:200px"><canvas id="htChart"></canvas></div></div>
+    <div class="cc" style="margin-bottom:0">
+      <h3>Intro completion rate by cohort</h3>
+      <div id="intro-wrap"></div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:12px">
+    <div class="cc" style="margin-bottom:0">
+      <h3>Callback queue</h3>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span style="font-size:28px;font-weight:500;color:var(--text)">1,243</span><span style="font-size:12px;color:var(--text3)">callbacks pending today</span></div>
+      <table><thead><tr><th>Cohort</th><th>Count</th><th>Next window</th><th>Priority</th></tr></thead><tbody id="callback-body"></tbody></table>
+    </div>
+    <div class="cc" style="margin-bottom:0">
+      <h3>Unresolved dispositions</h3>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span style="font-size:28px;font-weight:500;color:#a32d2d" id="unres-total"></span><span style="font-size:12px;color:var(--text3)">calls unresolved</span></div>
+      <div id="unres-wrap"></div>
+    </div>
+  </div>
+
+  <div class="cc" style="margin-top:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="margin-bottom:0">Escalation tracker</h3>
+      <div style="display:flex;gap:8px;font-size:11px">
+        <span class="sev sev-h">High 3</span>
+        <span class="sev sev-m">Medium 5</span>
+        <span class="sev sev-l">Low 4</span>
+      </div>
+    </div>
+    <table><thead><tr><th>Call ID</th><th>Cohort</th><th>Lead stage</th><th>Reason</th><th>Severity</th><th>Time</th></tr></thead><tbody id="esc-body"></tbody></table>
+  </div>
+
+  <div class="footer"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px"></i> Auto-refresh every 15 min for funnel &amp; ops · daily refresh for trends</div>
+</div>
+
+<script>
+document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+const FUNNEL=[
+  {stage:'Leads fed',count:15200,color:'#378ADD',tc:'#042C53'},
+  {stage:'Dialled',count:13800,color:'#185FA5',tc:'#E6F1FB'},
+  {stage:'Connected',count:8470,color:'#1D9E75',tc:'#04342C'},
+  {stage:'Interested',count:2016,color:'#3B6D11',tc:'#EAF3DE'},
+  {stage:'Slot booked',count:1677,color:'#0F6E56',tc:'#E1F5EE'},
+  {stage:'JHD handoff',count:1677,color:'#085041',tc:'#E1F5EE'},
+];
+const SUMMARY=[
+  {name:'Mobility base',total:4120,pos:1180,neu:1820,neg:1120},
+  {name:'Lead page bounce',total:3050,pos:980,neu:1240,neg:830},
+  {name:'Lapsed leads',total:2740,pos:620,neu:1100,neg:1020},
+  {name:'Terminated JioHome',total:1860,pos:390,neu:710,neg:760},
+  {name:'New serviceability',total:1580,pos:540,neu:710,neg:330},
+  {name:'JioHotstar CTV',total:980,pos:380,neu:390,neg:210},
+  {name:'Smart society / RWA',total:590,pos:230,neu:230,neg:130},
+];
+const OBJECTIONS=[
+  {reason:'Already has broadband / cable',count:1842},
+  {reason:'Price too high',count:1410},
+  {reason:'Call back later',count:1103},
+  {reason:'Not interested right now',count:894},
+  {reason:'Area not in service',count:612},
+  {reason:'Spouse / family decides',count:488},
+  {reason:'Already aware, no urgency',count:321},
+];
+const DISPOSITIONS=[
+  {label:'Slot booked',count:1677,color:'#0F6E56'},
+  {label:'Interested, no slot',count:339,color:'#3B6D11'},
+  {label:'Callback requested',count:1243,color:'#185FA5'},
+  {label:'Declined',count:1860,color:'#E24B4A'},
+  {label:'Wrong number',count:254,color:'#D85A30'},
+  {label:'DNC requested',count:169,color:'#A32D2D'},
+  {label:'Not reachable',count:2625,color:'#B4B2A9'},
+  {label:'Mid-call drop',count:1016,color:'#EF9F27'},
+];
+const HANDLE_TIMES=[
+  {label:'Slot booked',secs:142,color:'#0F6E56'},
+  {label:'Interested, no slot',secs:118,color:'#3B6D11'},
+  {label:'Callback req.',secs:87,color:'#185FA5'},
+  {label:'Declined',secs:64,color:'#E24B4A'},
+  {label:'DNC',secs:41,color:'#A32D2D'},
+  {label:'Wrong number',secs:22,color:'#D85A30'},
+  {label:'Not reachable',secs:18,color:'#B4B2A9'},
+];
+const INTRO=[
+  {name:'JioHotstar CTV',rate:81},
+  {name:'Mobility base',rate:76},
+  {name:'Smart society',rate:74},
+  {name:'New serviceability',rate:70},
+  {name:'Lead page bounce',rate:65},
+  {name:'Lapsed leads',rate:58},
+  {name:'Terminated JioHome',rate:51},
+];
+const CALLBACKS=[
+  {cohort:'Lead page bounce',count:412,window:'2p – 4p',pri:'High'},
+  {cohort:'Lapsed leads',count:318,window:'3p – 5p',pri:'High'},
+  {cohort:'Mobility base',count:241,window:'5p – 7p',pri:'Medium'},
+  {cohort:'Terminated JioHome',count:152,window:'4p – 6p',pri:'Medium'},
+  {cohort:'New serviceability',count:120,window:'6p – 8p',pri:'Low'},
+];
+const UNRESOLVED=[
+  {reason:'Max attempts reached, no answer',count:1840},
+  {reason:'Mid-call drop, no re-queue',count:1016},
+  {reason:'Voicemail — no callback set',count:587},
+  {reason:'Ambiguous outcome — needs review',count:214},
+];
+const ESCALATIONS=[
+  {id:'JC-00841',cohort:'Terminated JioHome',stage:'Stage 1 — Cold',reason:'Customer threatened legal action over repeated calls',sev:'High',time:'09:14'},
+  {id:'JC-01203',cohort:'Lapsed leads',stage:'Stage 2 — Warm',reason:'Customer expressed distress; requested DNC immediately',sev:'High',time:'10:47'},
+  {id:'JC-02015',cohort:'Lead page bounce',stage:'Stage 1 — Cold',reason:'Wrong person — number reassigned, existing subscriber',sev:'High',time:'14:22'},
+  {id:'JC-00532',cohort:'Mobility base',stage:'Stage 2 — Warm',reason:'Audio quality failure — customer unable to hear agent',sev:'Medium',time:'08:55'},
+  {id:'JC-01489',cohort:'Lapsed leads',stage:'Stage 3 — Interested',reason:'Slot confirmed but address outside serviceability',sev:'Medium',time:'11:30'},
+  {id:'JC-01751',cohort:'Terminated JioHome',stage:'Stage 1 — Cold',reason:'Customer flagged call as spam to carrier',sev:'Medium',time:'12:08'},
+  {id:'JC-02234',cohort:'New serviceability',stage:'Stage 2 — Warm',reason:'Agent misquoted plan price — customer complained',sev:'Medium',time:'15:41'},
+  {id:'JC-02390',cohort:'Smart society / RWA',stage:'Stage 3 — Interested',reason:'Slot double-booked with another field agent',sev:'Medium',time:'16:19'},
+  {id:'JC-00678',cohort:'JioHotstar CTV',stage:'Stage 1 — Cold',reason:'Language mismatch — customer only speaks Tamil',sev:'Low',time:'09:02'},
+  {id:'JC-01102',cohort:'Mobility base',stage:'Stage 2 — Warm',reason:'Call dropped mid-pitch; customer did not answer callback',sev:'Low',time:'10:15'},
+  {id:'JC-01867',cohort:'Lead page bounce',stage:'Stage 1 — Cold',reason:'Customer requested callback at a different time',sev:'Low',time:'13:50'},
+  {id:'JC-02501',cohort:'Lapsed leads',stage:'Stage 2 — Warm',reason:'Objection not handled — script gap flagged',sev:'Low',time:'17:05'},
+];
+
+function renderFunnel(){
+  const max=FUNNEL[0].count;
+  document.getElementById('funnel-wrap').innerHTML=FUNNEL.map((r,i)=>{
+    const pct=Math.round(r.count/max*100);
+    const drop=i>0?Math.round((1-r.count/FUNNEL[i-1].count)*100):null;
+    return`<div class="funnel-row"><div class="flbl">${r.stage}</div><div class="fbar-wrap"><div class="fbar" style="width:${pct}%;background:${r.color}"><span class="fcount" style="color:${r.tc}">${r.count.toLocaleString('en-IN')}</span></div></div><div class="fdrop">${drop!==null?(drop>0?`-${drop}%`:'—'):''}</div></div>`;
+  }).join('');
+}
+
+function renderSummary(){
+  document.getElementById('summary-body').innerHTML=SUMMARY.map(r=>{
+    const pp=Math.round(r.pos/r.total*100),np=Math.round(r.neu/r.total*100),ngp=Math.round(r.neg/r.total*100);
+    return`<tr><td style="font-weight:500">${r.name}</td><td>${r.total.toLocaleString('en-IN')}</td><td style="color:#3b6d11;font-weight:500">${r.pos.toLocaleString('en-IN')} <span style="font-size:10px;color:#888780">(${pp}%)</span></td><td style="color:#888780;font-weight:500">${r.neu.toLocaleString('en-IN')} <span style="font-size:10px;color:#888780">(${np}%)</span></td><td style="color:#a32d2d;font-weight:500">${r.neg.toLocaleString('en-IN')} <span style="font-size:10px;color:#888780">(${ngp}%)</span></td><td style="min-width:90px"><div class="summary-bar"><div style="width:${pp}%;background:#639922"></div><div style="width:${np}%;background:#b4b2a9"></div><div style="width:${ngp}%;background:#e24b4a"></div></div><div style="font-size:10px;color:#888780">${pp}·${np}·${ngp}%</div></td></tr>`;
+  }).join('');
+}
+
+function renderObjections(){
+  const max=OBJECTIONS[0].count;
+  document.getElementById('obj-wrap').innerHTML=OBJECTIONS.map(o=>`<div class="obj-row"><div class="obj-label">${o.reason}</div><div class="obj-bar-wrap"><div class="obj-bar" style="width:${Math.round(o.count/max*100)}%"></div></div><div class="obj-count">${o.count.toLocaleString('en-IN')}</div></div>`).join('');
+}
+
+function renderDisposition(){
+  const total=DISPOSITIONS.reduce((a,d)=>a+d.count,0);
+  new Chart(document.getElementById('dispChart'),{
+    type:'doughnut',
+    data:{labels:DISPOSITIONS.map(d=>d.label),datasets:[{data:DISPOSITIONS.map(d=>d.count),backgroundColor:DISPOSITIONS.map(d=>d.color),borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed.toLocaleString('en-IN')} (${Math.round(c.parsed/total*100)}%)`}}}}
+  });
+  document.getElementById('disp-legend').innerHTML=DISPOSITIONS.map(d=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${d.color};flex-shrink:0;display:inline-block"></span>${d.label} ${Math.round(d.count/total*100)}%</span>`).join('');
+}
+
+function renderHandleTime(){
+  new Chart(document.getElementById('htChart'),{
+    type:'bar',
+    data:{labels:HANDLE_TIMES.map(h=>h.label),datasets:[{label:'Avg seconds',data:HANDLE_TIMES.map(h=>h.secs),backgroundColor:HANDLE_TIMES.map(h=>h.color),borderWidth:0,borderRadius:3}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.parsed.x}s avg`}}},scales:{x:{ticks:{font:{size:11},callback:v=>v+'s'},grid:{color:'rgba(136,135,128,.15)'}},y:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+}
+
+function renderIntro(){
+  document.getElementById('intro-wrap').innerHTML=INTRO.map(r=>{
+    const color=r.rate>=70?'#639922':r.rate>=60?'#ba7517':'#a32d2d';
+    return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="font-size:12px;width:150px;flex-shrink:0">${r.name}</div><div style="flex:1;background:var(--bg2);border-radius:3px;height:7px;overflow:hidden"><div style="width:${r.rate}%;height:100%;border-radius:3px;background:${color}"></div></div><div style="font-size:12px;font-weight:500;color:${color};width:34px;text-align:right">${r.rate}%</div></div>`;
+  }).join('');
+}
+
+function renderCallbacks(){
+  document.getElementById('callback-body').innerHTML=CALLBACKS.map(c=>`<tr><td>${c.cohort}</td><td style="font-weight:500">${c.count.toLocaleString('en-IN')}</td><td style="color:#888780">${c.window}</td><td><span class="pill ${c.pri==='High'?'pr':c.pri==='Medium'?'pa':'pb'}">${c.pri}</span></td></tr>`).join('');
+}
+
+function renderUnresolved(){
+  const total=UNRESOLVED.reduce((a,u)=>a+u.count,0);
+  document.getElementById('unres-total').textContent=total.toLocaleString('en-IN');
+  document.getElementById('unres-wrap').innerHTML=UNRESOLVED.map(u=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${u.reason}</span><span style="color:#888780;font-weight:500">${u.count.toLocaleString('en-IN')}</span></div><div style="background:var(--bg2);border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round(u.count/total*100)}%;height:100%;border-radius:3px;background:#e24b4a"></div></div></div>`).join('');
+}
+
+function renderEscalations(){
+  document.getElementById('esc-body').innerHTML=ESCALATIONS.map(e=>{
+    const cls=e.sev==='High'?'sev-h':e.sev==='Medium'?'sev-m':'sev-l';
+    const sc=e.stage.includes('1')?'pb':e.stage.includes('2')?'pa':'pg';
+    return`<tr><td style="font-family:monospace;font-size:11px;color:#888780">${e.id}</td><td>${e.cohort}</td><td><span class="pill ${sc}">${e.stage}</span></td><td style="max-width:220px;line-height:1.45">${e.reason}</td><td><span class="sev ${cls}">${e.sev}</span></td><td style="color:#888780">${e.time}</td></tr>`;
+  }).join('');
+}
+
+function renderQualityChart(){
+  const hrs=['8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p'];
+  new Chart(document.getElementById('qualityChart'),{type:'line',data:{labels:hrs,datasets:[{label:'Completion %',data:[95.2,96.8,97.1,95.9,96.4,96.0,95.7,96.3,96.8,96.1,95.5],borderColor:'#185FA5',borderWidth:2,pointRadius:2,tension:.35,yAxisID:'y'},{label:'Early hang-up %',data:[14.1,13.2,12.8,12.5,11.9,12.1,12.7,12.4,12.1,12.6,13.0],borderColor:'#E24B4A',borderWidth:2,borderDash:[4,3],pointRadius:2,tension:.35,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}},grid:{display:false}},y:{min:93,max:100,ticks:{font:{size:11},color:'#185FA5',callback:v=>v+'%'},grid:{color:'rgba(136,135,128,.15)'}},y2:{min:8,max:18,position:'right',ticks:{font:{size:11},color:'#E24B4A',callback:v=>v+'%'},grid:{display:false}}}}});
+}
+
+function renderSentChart(){
+  new Chart(document.getElementById('sentChart'),{type:'doughnut',data:{labels:['Positive','Neutral','Negative'],datasets:[{data:[27.3,43.1,29.6],backgroundColor:['#639922','#B4B2A9','#E24B4A'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed.toFixed(1)}%`}}}}});
+}
+
+renderFunnel(); renderSummary(); renderObjections(); renderDisposition();
+renderHandleTime(); renderIntro(); renderCallbacks(); renderUnresolved();
+renderEscalations(); renderQualityChart(); renderSentChart();
+</script>
+</body>
+</html>
