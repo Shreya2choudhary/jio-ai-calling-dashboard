@@ -91,7 +91,7 @@ tr:last-child td{border-bottom:none}
   </div>
 
   <div class="filters">
-    <select><option>All cohorts</option><option>Mobility base (DTH/Cable)</option><option>Lapsed leads</option><option>New serviceability area</option><option>Terminated JioHome</option><option>Lead page bounce</option><option>JioHotstar CTV</option><option>Smart society / RWA</option></select>
+    <select><option>All cohorts</option><option>Warm leads (GSD)</option><option>Mobility base (DTH/Cable)</option><option>Lapsed leads</option><option>New serviceability area</option><option>Terminated JioHome</option><option>Lead page bounce</option><option>JioHotstar CTV</option><option>Smart society / RWA</option></select>
     <select><option value="D">D — Today</option><option value="D1">D-1 — Yesterday</option><option value="L7">Last 7 days</option><option value="L30">Last 30 days</option></select>
   </div>
   <div class="filter-note">7 cohorts · Cold + Warm leads</div>
@@ -132,7 +132,7 @@ tr:last-child td{border-bottom:none}
           <div style="font-size:22px;font-weight:500;color:#185fa5">342</div>
         </div>
         <div style="flex:1;background:#eaf3de;border-radius:var(--r);padding:12px">
-          <div style="font-size:11px;color:#3b6d11;margin-bottom:4px">JHD leads from inbound</div>
+          <div style="font-size:11px;color:#3b6d11;margin-bottom:4px">Slots booked from inbound</div>
           <div style="font-size:22px;font-weight:500;color:#3b6d11">198</div>
           <div style="font-size:11px;color:#3b6d11">57.9% conversion</div>
         </div>
@@ -142,10 +142,10 @@ tr:last-child td{border-bottom:none}
       <div id="inbound-funnel"></div>
 
       <div style="border-top:0.5px solid var(--border);margin-top:14px;padding-top:14px">
-        <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">Combined JHD leads (outbound + inbound)</div>
+        <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">Total slots booked (outbound + inbound)</div>
         <div style="display:flex;align-items:baseline;gap:8px">
           <span style="font-size:26px;font-weight:500;color:#3b6d11">1,058</span>
-          <span style="font-size:12px;color:var(--text3)">total JHD leads today</span>
+          <span style="font-size:12px;color:var(--text3)">slots booked today</span>
         </div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px">860 outbound · 198 inbound</div>
       </div>
@@ -158,13 +158,13 @@ tr:last-child td{border-bottom:none}
     <div class="mc"><div class="dot dg"></div><div class="lbl">Connect rate</div><div class="val">61.4%</div><div class="sub">Connected / Dialled</div></div>
     <div class="mc"><div class="dot da"></div><div class="lbl">Concluded %</div><div class="val">42.7%</div><div class="sub">Concluded / Connected</div></div>
     <div class="mc"><div class="dot da"></div><div class="lbl">Interested %</div><div class="val">23.8%</div><div class="sub">Interested / Concluded</div></div>
-    <div class="mc primary"><div class="lbl">JHD lead rate % <span style="font-size:10px">(outbound)</span></div><div class="val">83.2%</div><div class="sub">Slot booked or JHD lead / Interested</div></div>
+    <div class="mc primary"><div class="lbl">Slot booking rate</div><div class="val">83.2%</div><div class="sub">Slot booked / Interested</div></div>
   </div>
 
   <div class="cc">
     <h3>KPI breakdown by cohort</h3>
     <table>
-      <thead><tr><th>Cohort</th><th>Dialled</th><th>Connect rate</th><th>Concluded %</th><th>Interested %</th><th>JHD lead rate %</th></tr></thead>
+      <thead><tr><th>Cohort</th><th>Dialled</th><th>Connect rate</th><th>Concluded %</th><th>Interested %</th><th>Slot booking rate</th></tr></thead>
       <tbody id="cohort-kpi-body"></tbody>
     </table>
   </div>
@@ -269,7 +269,7 @@ const OUTBOUND_FUNNEL = [
   {stage:'· Call drop',   count:1210,  color:'#d85a30', tc:'#fff', sep:false},
   {stage:'· Cust. hung up',count:2104, color:'#ef9f27', tc:'#412402', sep:false},
   {stage:'· Callback/Busy',count:1539, color:'#fac775', tc:'#412402', sep:false},
-  {stage:'Interested & JHD',count:860, color:'#0f6e56', tc:'#fff', sep:true},
+  {stage:'Slot booked',     count:860, color:'#0f6e56', tc:'#fff', sep:true},
   {stage:'Not interested', count:2757, color:'#b4b2a9', tc:'#2c2c2a', sep:false},
 ];
 
@@ -277,17 +277,18 @@ const INBOUND_FUNNEL = [
   {stage:'Total callbacks', count:342, color:'#185fa5', tc:'#fff'},
   {stage:'Concluded',       count:298, color:'#3b6d11', tc:'#fff'},
   {stage:'Interested',      count:214, color:'#1d9e75', tc:'#fff'},
-  {stage:'JHD lead created',count:198, color:'#0f6e56', tc:'#fff'},
+  {stage:'Slot booked',     count:198, color:'#0f6e56', tc:'#fff'},
 ];
 
 const COHORT_KPI = [
-  {name:'Mobility base',      dialled:4200, conn:68.2, conc:45.1, int:26.3, jhd:88.1},
-  {name:'Lead page bounce',   dialled:3100, conn:58.4, conc:39.7, int:21.2, jhd:80.4},
-  {name:'Lapsed leads',       dialled:2800, conn:60.1, conc:41.8, int:22.9, jhd:82.1},
-  {name:'Terminated JioHome', dialled:1900, conn:55.7, conc:36.2, int:18.4, jhd:76.3},
-  {name:'New serviceability', dialled:1600, conn:63.4, conc:43.0, int:24.1, jhd:84.0},
-  {name:'JioHotstar CTV',     dialled:1000, conn:66.1, conc:46.5, int:27.8, jhd:89.2},
-  {name:'Smart society/RWA',  dialled:600,  conn:64.5, conc:44.2, int:25.6, jhd:83.9},
+  {name:'Warm leads (GSD)',    dialled:2800, conn:74.1, conc:58.3, int:41.2, slot:91.4},
+  {name:'Mobility base',      dialled:4200, conn:68.2, conc:45.1, int:26.3, slot:88.1},
+  {name:'Lead page bounce',   dialled:3100, conn:58.4, conc:39.7, int:21.2, slot:80.4},
+  {name:'Lapsed leads',       dialled:2800, conn:60.1, conc:41.8, int:22.9, slot:82.1},
+  {name:'Terminated JioHome', dialled:1900, conn:55.7, conc:36.2, int:18.4, slot:76.3},
+  {name:'New serviceability', dialled:1600, conn:63.4, conc:43.0, int:24.1, slot:84.0},
+  {name:'JioHotstar CTV',     dialled:1000, conn:66.1, conc:46.5, int:27.8, slot:89.2},
+  {name:'Smart society/RWA',  dialled:600,  conn:64.5, conc:44.2, int:25.6, slot:83.9},
 ];
 
 const TREND_DOD = {
@@ -383,7 +384,7 @@ function renderCohortKPI(){
     <td><span class="pill ${c.conn>=65?'pg':'pr'}">${c.conn.toFixed(1)}%</span></td>
     <td><span class="pill ${c.conc>=42?'pg':'pa'}">${c.conc.toFixed(1)}%</span></td>
     <td><span class="pill ${c.int>=24?'pg':'pa'}">${c.int.toFixed(1)}%</span></td>
-    <td><span class="pill ${c.jhd>=80?'pg':'pr'}" style="font-weight:500">${c.jhd.toFixed(1)}%</span></td>
+    <td><span class="pill ${c.slot>=80?'pg':'pr'}" style="font-weight:500">${c.slot.toFixed(1)}%</span></td>
   </tr>`).join('');
 }
 
