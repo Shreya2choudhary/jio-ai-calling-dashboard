@@ -20,38 +20,32 @@
 }
 body{background:var(--bg3);font-family:var(--font);color:var(--text);font-size:14px;min-height:100vh}
 .page{max-width:1120px;margin:0 auto;padding:24px 20px 56px}
-/* top bar */
 .top-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
 .top-bar h1{font-size:17px;font-weight:500;flex:1;color:var(--text)}
 .badge{font-size:11px;padding:3px 10px;border-radius:var(--r);background:#eaf3de;color:#3b6d11;display:flex;align-items:center;gap:4px}
-/* filters */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;align-items:center}
 .filters select{font-size:13px;padding:7px 12px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);color:var(--text);cursor:pointer;outline:none}
 .filters select:focus{border-color:#185fa5}
 .filter-note{font-size:11px;color:var(--text3);margin-bottom:20px}
-/* section label */
 .sec{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;margin-top:24px}
-/* cards */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
 .mc{background:var(--bg2);border-radius:var(--r);padding:14px 16px;position:relative}
 .mc .lbl{font-size:11px;color:var(--text3);margin-bottom:6px;line-height:1.35}
 .mc .val{font-size:23px;font-weight:500;color:var(--text);line-height:1}
 .mc .sub{font-size:11px;color:var(--text3);margin-top:5px}
 .mc .dot{width:7px;height:7px;border-radius:50%;position:absolute;top:14px;right:14px}
-.dg{background:#639922}.dr{background:#e24b4a}.da{background:#ba7517}.dn{background:#b4b2a9}
-/* primary KPI card */
+.dg{background:#639922}.dr{background:#e24b4a}.da{background:#ba7517}
 .mc.primary{background:#eaf3de;border:1px solid #c0dd97}
-.mc.primary .lbl{color:#3b6d11}
-.mc.primary .val{color:#3b6d11}
-.mc.primary .sub{color:#3b6d11}
-/* card */
+.mc.primary .lbl,.mc.primary .val,.mc.primary .sub{color:#3b6d11}
+.mc.inbound{background:#e6f1fb;border:1px solid #b5d4f4}
+.mc.inbound .lbl,.mc.inbound .sub{color:#185fa5}
+.mc.inbound .val{color:#185fa5}
 .cc{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:12px}
 .cc h3{font-size:13px;font-weight:500;color:var(--text);margin-bottom:14px}
-/* grid layouts */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 @media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr}}
-/* funnel */
+/* outbound funnel */
 .funnel-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
 .flbl{font-size:12px;color:var(--text3);width:130px;flex-shrink:0;text-align:right;line-height:1.3}
 .fbar-wrap{flex:1;background:var(--bg2);border-radius:4px;height:30px;overflow:hidden}
@@ -59,73 +53,112 @@ body{background:var(--bg3);font-family:var(--font);color:var(--text);font-size:1
 .fcount{font-size:12px;font-weight:500}
 .fdrop{font-size:11px;color:var(--text3);width:52px;flex-shrink:0;text-align:right}
 .fsep{border-top:1px dashed var(--border);margin:8px 0}
+/* inbound mini-funnel */
+.ib-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.ib-lbl{font-size:12px;color:var(--text3);width:110px;flex-shrink:0;text-align:right}
+.ib-bar-wrap{flex:1;background:var(--bg2);border-radius:4px;height:26px;overflow:hidden}
+.ib-bar{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.ib-count{font-size:12px;font-weight:500}
 /* table */
 table{width:100%;border-collapse:collapse}
 th{color:var(--text3);font-weight:400;text-align:left;padding:0 8px 8px 0;border-bottom:0.5px solid var(--border);font-size:12px}
 td{padding:8px 8px 8px 0;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle;font-size:12px}
 tr:last-child td{border-bottom:none}
-/* pills */
 .pill{font-size:11px;padding:2px 8px;border-radius:20px;display:inline-block}
 .pg{background:#eaf3de;color:#3b6d11}.pr{background:#fcebeb;color:#a32d2d}.pa{background:#faeeda;color:#854f0b}.pb{background:#e6f1fb;color:#185fa5}
-/* trend toggle */
 .toggle-wrap{display:flex;gap:4px;margin-bottom:14px}
 .toggle-btn{font-size:12px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text3);cursor:pointer}
 .toggle-btn.active{background:#185fa5;color:#fff;border-color:#185fa5}
-/* objection rows */
 .obj-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
 .obj-lbl{font-size:12px;color:var(--text);width:200px;flex-shrink:0}
 .obj-bw{flex:1;background:var(--bg2);border-radius:3px;height:7px;overflow:hidden}
 .obj-b{height:100%;border-radius:3px;background:#378add}
 .obj-c{font-size:12px;color:var(--text3);width:44px;text-align:right;flex-shrink:0}
-/* feasibility badge */
 .feasibility{font-size:11px;padding:3px 10px;border-radius:var(--r);background:#faeeda;color:#854f0b;display:inline-flex;align-items:center;gap:4px}
-/* reason split bar */
 .rsbar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:5px 0 3px}
-/* sentiment donut legend */
 .sent-leg{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--text3);margin-top:8px}
+.note-chip{font-size:11px;padding:2px 10px;border-radius:20px;background:var(--bg2);color:var(--text3);border:0.5px solid var(--border)}
 .footer{font-size:11px;color:var(--text3);text-align:right;padding-top:8px}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- TOP BAR -->
   <div class="top-bar">
     <h1><i class="ti ti-phone-call" style="font-size:18px;vertical-align:-3px;margin-right:6px"></i>AI calling campaign — dashboard MVP</h1>
     <div class="badge"><i class="ti ti-refresh" style="font-size:13px"></i> Live · refreshed 2 min ago</div>
     <span style="font-size:12px;color:var(--text3)" id="today-label"></span>
   </div>
 
-  <!-- FILTERS -->
   <div class="filters">
-    <select id="f-cohort"><option>All cohorts</option><option>Mobility base (DTH/Cable)</option><option>Lapsed leads</option><option>New serviceability area</option><option>Terminated JioHome</option><option>Lead page bounce</option><option>JioHotstar CTV</option><option>Smart society / RWA</option></select>
-    <select id="f-date"><option value="D">D — Today</option><option value="D1">D-1 — Yesterday</option><option value="L7">Last 7 days</option><option value="L30">Last 30 days</option></select>
+    <select><option>All cohorts</option><option>Mobility base (DTH/Cable)</option><option>Lapsed leads</option><option>New serviceability area</option><option>Terminated JioHome</option><option>Lead page bounce</option><option>JioHotstar CTV</option><option>Smart society / RWA</option></select>
+    <select><option value="D">D — Today</option><option value="D1">D-1 — Yesterday</option><option value="L7">Last 7 days</option><option value="L30">Last 30 days</option></select>
   </div>
-  <div class="filter-note">7 cohorts available · Cold + Warm leads</div>
+  <div class="filter-note">7 cohorts · Cold + Warm leads</div>
 
-  <!-- SECTION 1: CALL STATUS -->
-  <div class="sec" style="margin-top:0">Call status</div>
-
+  <!-- CALL STATUS OVERVIEW -->
+  <div class="sec" style="margin-top:0">Call status overview</div>
   <div class="cards">
     <div class="mc"><div class="lbl">Calling base</div><div class="val">15,200</div><div class="sub">Eligible leads fed</div></div>
-    <div class="mc"><div class="lbl">Total dials</div><div class="val">13,800</div><div class="sub">All dial attempts</div></div>
+    <div class="mc"><div class="lbl">Total dials</div><div class="val">13,800</div><div class="sub">All outbound attempts</div></div>
     <div class="mc"><div class="lbl">Unique dials</div><div class="val">11,940</div><div class="sub">Distinct numbers dialled</div></div>
-    <div class="mc"><div class="lbl">Total inbound</div><div class="val">342</div><div class="sub">Customer-initiated calls</div></div>
+    <div class="mc inbound">
+      <div class="lbl"><i class="ti ti-phone-incoming" style="font-size:12px;vertical-align:-1px"></i> Total inbound</div>
+      <div class="val">342</div>
+      <div class="sub">Callbacks after missed dials · tracked separately</div>
+    </div>
   </div>
 
-  <div class="cc">
-    <h3>Call funnel — from dials to outcome</h3>
-    <div id="funnel-wrap"></div>
+  <!-- OUTBOUND FUNNEL + INBOUND PANEL side by side -->
+  <div class="two-col">
+    <div class="cc" style="margin-bottom:0">
+      <h3>Outbound call funnel</h3>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+        <span class="note-chip">Outbound only</span> Inbound callbacks tracked separately →
+      </div>
+      <div id="funnel-wrap"></div>
+    </div>
+
+    <div class="cc" style="margin-bottom:0">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <h3 style="margin-bottom:0">Inbound callbacks</h3>
+        <span class="note-chip"><i class="ti ti-phone-incoming" style="font-size:11px;vertical-align:-1px"></i> customer-initiated</span>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.5">Customers who called back after missed outbound attempts. Already connected by definition — tracked from Concluded onwards.</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <div style="flex:1;background:var(--bg2);border-radius:var(--r);padding:12px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Total callbacks</div>
+          <div style="font-size:22px;font-weight:500;color:#185fa5">342</div>
+        </div>
+        <div style="flex:1;background:#eaf3de;border-radius:var(--r);padding:12px">
+          <div style="font-size:11px;color:#3b6d11;margin-bottom:4px">JHD leads from inbound</div>
+          <div style="font-size:22px;font-weight:500;color:#3b6d11">198</div>
+          <div style="font-size:11px;color:#3b6d11">57.9% conversion</div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:10px">Inbound outcome breakdown</div>
+      <div id="inbound-funnel"></div>
+
+      <div style="border-top:0.5px solid var(--border);margin-top:14px;padding-top:14px">
+        <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">Combined JHD leads (outbound + inbound)</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <span style="font-size:26px;font-weight:500;color:#3b6d11">1,058</span>
+          <span style="font-size:12px;color:var(--text3)">total JHD leads today</span>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">860 outbound · 198 inbound</div>
+      </div>
+    </div>
   </div>
 
-  <!-- SECTION 2: KEY KPIs BY COHORT -->
+  <!-- KEY KPIs BY COHORT -->
   <div class="sec">Key KPIs by cohort</div>
-
   <div class="cards">
     <div class="mc"><div class="dot dg"></div><div class="lbl">Connect rate</div><div class="val">61.4%</div><div class="sub">Connected / Dialled</div></div>
     <div class="mc"><div class="dot da"></div><div class="lbl">Concluded %</div><div class="val">42.7%</div><div class="sub">Concluded / Connected</div></div>
     <div class="mc"><div class="dot da"></div><div class="lbl">Interested %</div><div class="val">23.8%</div><div class="sub">Interested / Concluded</div></div>
-    <div class="mc primary"><div class="lbl">JHD lead rate %</div><div class="val">83.2%</div><div class="sub">Slot booked or JHD lead / Interested</div></div>
+    <div class="mc primary"><div class="lbl">JHD lead rate % <span style="font-size:10px">(outbound)</span></div><div class="val">83.2%</div><div class="sub">Slot booked or JHD lead / Interested</div></div>
   </div>
 
   <div class="cc">
@@ -136,7 +169,7 @@ tr:last-child td{border-bottom:none}
     </table>
   </div>
 
-  <!-- SECTION 3: TREND -->
+  <!-- TREND -->
   <div class="sec">Trend of key KPIs by cohort</div>
   <div class="cc">
     <h3>KPI trend</h3>
@@ -148,20 +181,14 @@ tr:last-child td{border-bottom:none}
     <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--text3);flex-wrap:wrap" id="trend-legend"></div>
   </div>
 
-  <!-- SECTION 4: REASONS -->
+  <!-- REASONS -->
   <div class="sec">Reasons — outcome detail</div>
   <div class="two-col">
-    <div class="cc" style="margin-bottom:0">
-      <h3>Interest reasons</h3>
-      <div id="interest-reasons"></div>
-    </div>
-    <div class="cc" style="margin-bottom:0">
-      <h3>Not interested reasons</h3>
-      <div id="notint-reasons"></div>
-    </div>
+    <div class="cc" style="margin-bottom:0"><h3>Interest reasons</h3><div id="interest-reasons"></div></div>
+    <div class="cc" style="margin-bottom:0"><h3>Not interested reasons</h3><div id="notint-reasons"></div></div>
   </div>
 
-  <!-- SECTION 5: KEY OBJECTIONS -->
+  <!-- KEY OBJECTIONS -->
   <div class="sec" style="margin-top:20px">Key objections in call</div>
   <div class="cc">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -171,17 +198,16 @@ tr:last-child td{border-bottom:none}
     <div id="obj-wrap"></div>
   </div>
 
-  <!-- SECTION 6: BOT CALL QUALITY -->
+  <!-- BOT CALL QUALITY -->
   <div class="sec">Bot call quality KPIs</div>
   <div class="two-col">
     <div class="cc" style="margin-bottom:0">
-      <h3>Avg call duration</h3>
+      <h3>Avg call duration by outcome</h3>
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px">
         <span style="font-size:32px;font-weight:500;color:#185fa5">104s</span>
         <span style="font-size:12px;color:var(--text3)">avg across connected calls</span>
       </div>
-      <div style="position:relative;height:160px"><canvas id="durationChart"></canvas></div>
-      <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--text3);flex-wrap:wrap" id="dur-legend"></div>
+      <div style="position:relative;height:180px"><canvas id="durationChart"></canvas></div>
     </div>
     <div class="cc" style="margin-bottom:0">
       <h3>Effective at call <span style="font-size:11px;color:var(--text3);font-weight:400">(&lt;45 secs = ineffective)</span></h3>
@@ -194,21 +220,21 @@ tr:last-child td{border-bottom:none}
       </div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:20px">12.4% dropped before 45s — <span style="color:#a32d2d">1,213 calls</span></div>
       <div style="border-top:0.5px solid var(--border);padding-top:14px">
-        <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
-          <span style="font-size:12px;color:var(--text);font-weight:500">Latency in response</span>
-          <span class="feasibility"><i class="ti ti-flask" style="font-size:12px"></i> Feasibility pending</span>
+        <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+          <span style="font-size:12px;font-weight:500">Latency in response</span>
+          <span class="feasibility"><i class="ti ti-flask" style="font-size:12px"></i> Feasibility pending — Eva team</span>
         </div>
-        <div style="font-size:12px;color:var(--text3);line-height:1.5">Gap between customer finishing speaking and bot responding. Eva team to confirm data availability.</div>
-        <div style="display:flex;gap:8px;margin-top:12px;margin-bottom:6px;align-items:center">
-          <span style="font-size:12px;color:var(--text);font-weight:500">Avg silence duration</span>
-          <span class="feasibility"><i class="ti ti-flask" style="font-size:12px"></i> Feasibility pending</span>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:14px">Gap between customer finishing speaking and bot responding.</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+          <span style="font-size:12px;font-weight:500">Avg silence duration</span>
+          <span class="feasibility"><i class="ti ti-flask" style="font-size:12px"></i> Feasibility pending — Eva team</span>
         </div>
-        <div style="font-size:12px;color:var(--text3);line-height:1.5">Avg total latency as share of call duration. Eva team to confirm data availability.</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5">Avg total latency as share of call duration.</div>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 7: SENTIMENT -->
+  <!-- SENTIMENT -->
   <div class="sec" style="margin-top:20px">Call sentiment analysis</div>
   <div class="two-col">
     <div class="cc" style="margin-bottom:0">
@@ -227,57 +253,63 @@ tr:last-child td{border-bottom:none}
 
   <div class="footer" style="margin-top:16px"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px"></i> Filters: Cohort · D / D-1 / L7 / L30 · Auto-refresh every 15 min</div>
 
-</div><!-- end page -->
+</div>
 
 <script>
 document.getElementById('today-label').textContent = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 
-/* ── DATA ── */
-const FUNNEL = [
-  {stage:'Calling base',     count:15200, color:'#5a87c5', tc:'#fff', sep:false},
-  {stage:'Total dials',      count:13800, color:'#378add', tc:'#fff', sep:false},
-  {stage:'Total inbound',    count:342,   color:'#7f77dd', tc:'#fff', sep:false},
-  {stage:'Connected',        count:8470,  color:'#1d9e75', tc:'#fff', sep:true},
-  {stage:'Not connected',    count:5330,  color:'#e24b4a', tc:'#fff', sep:false},
-  {stage:'— Concluded',      count:3617,  color:'#3b6d11', tc:'#fff', sep:true},
-  {stage:'— Not concluded',  count:4853,  color:'#ba7517', tc:'#fff', sep:false},
-  {stage:'  · Call drop',    count:1210,  color:'#d85a30', tc:'#fff', sep:false},
-  {stage:'  · Customer hung up',count:2104,color:'#ef9f27',tc:'#fff',sep:false},
-  {stage:'  · Callback/Busy',count:1539,  color:'#fac775', tc:'#412402', sep:false},
-  {stage:'Interested & JHD lead',count:860,color:'#0f6e56',tc:'#fff',sep:true},
-  {stage:'Not interested',   count:2757,  color:'#b4b2a9', tc:'#2c2c2a', sep:false},
+const OUTBOUND_FUNNEL = [
+  {stage:'Calling base',  count:15200, color:'#5a87c5', tc:'#fff', sep:false},
+  {stage:'Total dials',   count:13800, color:'#378add', tc:'#fff', sep:false},
+  {stage:'Unique dials',  count:11940, color:'#185fa5', tc:'#fff', sep:false},
+  {stage:'Connected',     count:8470,  color:'#1d9e75', tc:'#fff', sep:true},
+  {stage:'Not connected', count:5330,  color:'#e24b4a', tc:'#fff', sep:false},
+  {stage:'Concluded',     count:3617,  color:'#3b6d11', tc:'#fff', sep:true},
+  {stage:'Not concluded', count:4853,  color:'#ba7517', tc:'#fff', sep:false},
+  {stage:'· Call drop',   count:1210,  color:'#d85a30', tc:'#fff', sep:false},
+  {stage:'· Cust. hung up',count:2104, color:'#ef9f27', tc:'#412402', sep:false},
+  {stage:'· Callback/Busy',count:1539, color:'#fac775', tc:'#412402', sep:false},
+  {stage:'Interested & JHD',count:860, color:'#0f6e56', tc:'#fff', sep:true},
+  {stage:'Not interested', count:2757, color:'#b4b2a9', tc:'#2c2c2a', sep:false},
+];
+
+const INBOUND_FUNNEL = [
+  {stage:'Total callbacks', count:342, color:'#185fa5', tc:'#fff'},
+  {stage:'Concluded',       count:298, color:'#3b6d11', tc:'#fff'},
+  {stage:'Interested',      count:214, color:'#1d9e75', tc:'#fff'},
+  {stage:'JHD lead created',count:198, color:'#0f6e56', tc:'#fff'},
 ];
 
 const COHORT_KPI = [
-  {name:'Mobility base',     dialled:4200, conn:68.2, conc:45.1, int:26.3, jhd:88.1},
-  {name:'Lead page bounce',  dialled:3100, conn:58.4, conc:39.7, int:21.2, jhd:80.4},
-  {name:'Lapsed leads',      dialled:2800, conn:60.1, conc:41.8, int:22.9, jhd:82.1},
-  {name:'Terminated JioHome',dialled:1900, conn:55.7, conc:36.2, int:18.4, jhd:76.3},
-  {name:'New serviceability',dialled:1600, conn:63.4, conc:43.0, int:24.1, jhd:84.0},
-  {name:'JioHotstar CTV',    dialled:1000, conn:66.1, conc:46.5, int:27.8, jhd:89.2},
-  {name:'Smart society/RWA', dialled:600,  conn:64.5, conc:44.2, int:25.6, jhd:83.9},
+  {name:'Mobility base',      dialled:4200, conn:68.2, conc:45.1, int:26.3, jhd:88.1},
+  {name:'Lead page bounce',   dialled:3100, conn:58.4, conc:39.7, int:21.2, jhd:80.4},
+  {name:'Lapsed leads',       dialled:2800, conn:60.1, conc:41.8, int:22.9, jhd:82.1},
+  {name:'Terminated JioHome', dialled:1900, conn:55.7, conc:36.2, int:18.4, jhd:76.3},
+  {name:'New serviceability', dialled:1600, conn:63.4, conc:43.0, int:24.1, jhd:84.0},
+  {name:'JioHotstar CTV',     dialled:1000, conn:66.1, conc:46.5, int:27.8, jhd:89.2},
+  {name:'Smart society/RWA',  dialled:600,  conn:64.5, conc:44.2, int:25.6, jhd:83.9},
 ];
 
 const TREND_DOD = {
   labels:['D-6','D-5','D-4','D-3','D-2','D-1','Today'],
-  conn: [59.1,60.3,58.7,61.0,60.8,62.1,61.4],
-  conc: [40.2,41.0,39.8,41.5,42.0,42.3,42.7],
-  int:  [21.4,22.0,21.8,23.1,23.5,23.6,23.8],
-  jhd:  [79.2,80.1,80.5,81.3,82.0,82.7,83.2],
+  conn:[59.1,60.3,58.7,61.0,60.8,62.1,61.4],
+  conc:[40.2,41.0,39.8,41.5,42.0,42.3,42.7],
+  int: [21.4,22.0,21.8,23.1,23.5,23.6,23.8],
+  jhd: [79.2,80.1,80.5,81.3,82.0,82.7,83.2],
 };
 const TREND_WOW = {
   labels:['W-4','W-3','W-2','W-1','This week'],
-  conn: [57.2,58.9,60.1,61.0,61.4],
-  conc: [38.1,39.5,40.8,41.9,42.7],
-  int:  [19.8,21.2,22.5,23.4,23.8],
-  jhd:  [76.3,78.8,80.5,82.1,83.2],
+  conn:[57.2,58.9,60.1,61.0,61.4],
+  conc:[38.1,39.5,40.8,41.9,42.7],
+  int: [19.8,21.2,22.5,23.4,23.8],
+  jhd: [76.3,78.8,80.5,82.1,83.2],
 };
 
 const INTEREST_REASONS = [
   {reason:'Better speed / reliability needed',count:312},
   {reason:'Existing plan expiring soon',count:241},
   {reason:'Switching from cable / DTH bundle',count:198},
-  {reason:'Society / building moving to JioFiber',count:164},
+  {reason:'Society moving to JioFiber',count:164},
   {reason:'Attractive plan pricing',count:145},
 ];
 const NOTINT_REASONS = [
@@ -288,7 +320,6 @@ const NOTINT_REASONS = [
   {reason:'Area not serviceable',count:271},
   {reason:'No need right now',count:143},
 ];
-
 const OBJECTIONS = [
   {reason:'Already has broadband / cable',count:1842},
   {reason:'Price too high',count:1410},
@@ -298,7 +329,6 @@ const OBJECTIONS = [
   {reason:'Spouse / family decides',count:488},
   {reason:'Already aware, no urgency',count:321},
 ];
-
 const DURATION_BY_OUTCOME = [
   {label:'Interested & JHD',secs:142,color:'#0f6e56'},
   {label:'Concluded, no interest',secs:98,color:'#3b6d11'},
@@ -307,7 +337,6 @@ const DURATION_BY_OUTCOME = [
   {label:'Call drop',secs:28,color:'#e24b4a'},
   {label:'Not connected',secs:12,color:'#b4b2a9'},
 ];
-
 const SENTIMENT_COHORT = [
   {name:'Mobility base',pos:29,neu:44,neg:27},
   {name:'Lead page bounce',pos:32,neu:41,neg:27},
@@ -318,16 +347,15 @@ const SENTIMENT_COHORT = [
   {name:'Smart society/RWA',pos:37,neu:44,neg:19},
 ];
 
-/* ── RENDER FUNNEL ── */
+/* OUTBOUND FUNNEL */
 function renderFunnel(){
-  const max = FUNNEL[0].count;
-  document.getElementById('funnel-wrap').innerHTML = FUNNEL.map((r,i)=>{
+  const max = OUTBOUND_FUNNEL[0].count;
+  document.getElementById('funnel-wrap').innerHTML = OUTBOUND_FUNNEL.map((r,i)=>{
     const pct = Math.round(r.count/max*100);
-    const prev = FUNNEL.filter((_,j)=>j<i && !FUNNEL[j].stage.startsWith(' '));
-    const lastMajor = prev.length ? prev[prev.length-1] : null;
-    const drop = lastMajor && !r.stage.startsWith(' ') ? Math.round((1-r.count/lastMajor.count)*100) : null;
-    const sep = r.sep ? '<div class="fsep"></div>' : '';
-    return `${sep}<div class="funnel-row">
+    const majorRows = OUTBOUND_FUNNEL.filter((_,j)=>j<i&&!OUTBOUND_FUNNEL[j].stage.startsWith('·'));
+    const lastMajor = majorRows.length ? majorRows[majorRows.length-1] : null;
+    const drop = lastMajor && !r.stage.startsWith('·') ? Math.round((1-r.count/lastMajor.count)*100) : null;
+    return `${r.sep?'<div class="fsep"></div>':''}<div class="funnel-row">
       <div class="flbl">${r.stage}</div>
       <div class="fbar-wrap"><div class="fbar" style="width:${pct}%;background:${r.color}"><span class="fcount" style="color:${r.tc}">${r.count.toLocaleString('en-IN')}</span></div></div>
       <div class="fdrop">${drop!==null&&drop>0?`-${drop}%`:''}</div>
@@ -335,28 +363,34 @@ function renderFunnel(){
   }).join('');
 }
 
-/* ── RENDER COHORT KPI TABLE ── */
-function renderCohortKPI(){
-  document.getElementById('cohort-kpi-body').innerHTML = COHORT_KPI.map(c=>{
-    const connC = c.conn>=65?'pg':'pr';
-    const concC = c.conc>=42?'pg':'pa';
-    const intC  = c.int>=24?'pg':'pa';
-    const jhdC  = c.jhd>=80?'pg':'pr';
-    return `<tr>
-      <td style="font-weight:500">${c.name}</td>
-      <td>${c.dialled.toLocaleString('en-IN')}</td>
-      <td><span class="pill ${connC}">${c.conn.toFixed(1)}%</span></td>
-      <td><span class="pill ${concC}">${c.conc.toFixed(1)}%</span></td>
-      <td><span class="pill ${intC}">${c.int.toFixed(1)}%</span></td>
-      <td><span class="pill ${jhdC}" style="font-weight:500">${c.jhd.toFixed(1)}%</span></td>
-    </tr>`;
+/* INBOUND FUNNEL */
+function renderInboundFunnel(){
+  const max = INBOUND_FUNNEL[0].count;
+  document.getElementById('inbound-funnel').innerHTML = INBOUND_FUNNEL.map(r=>{
+    const pct = Math.round(r.count/max*100);
+    return `<div class="ib-row">
+      <div class="ib-lbl">${r.stage}</div>
+      <div class="ib-bar-wrap"><div class="ib-bar" style="width:${pct}%;background:${r.color}"><span class="ib-count" style="color:#fff">${r.count.toLocaleString('en-IN')}</span></div></div>
+    </div>`;
   }).join('');
 }
 
-/* ── TREND CHART ── */
+/* COHORT KPI TABLE */
+function renderCohortKPI(){
+  document.getElementById('cohort-kpi-body').innerHTML = COHORT_KPI.map(c=>`<tr>
+    <td style="font-weight:500">${c.name}</td>
+    <td>${c.dialled.toLocaleString('en-IN')}</td>
+    <td><span class="pill ${c.conn>=65?'pg':'pr'}">${c.conn.toFixed(1)}%</span></td>
+    <td><span class="pill ${c.conc>=42?'pg':'pa'}">${c.conc.toFixed(1)}%</span></td>
+    <td><span class="pill ${c.int>=24?'pg':'pa'}">${c.int.toFixed(1)}%</span></td>
+    <td><span class="pill ${c.jhd>=80?'pg':'pr'}" style="font-weight:500">${c.jhd.toFixed(1)}%</span></td>
+  </tr>`).join('');
+}
+
+/* TREND CHART */
 let trendChart = null;
 function buildTrendChart(data){
-  const SERIES = [
+  const SERIES=[
     {key:'conn',label:'Connect rate',color:'#185fa5'},
     {key:'conc',label:'Concluded %',color:'#3b6d11'},
     {key:'int', label:'Interested %',color:'#ba7517'},
@@ -365,84 +399,76 @@ function buildTrendChart(data){
   if(trendChart) trendChart.destroy();
   trendChart = new Chart(document.getElementById('trendChart'),{
     type:'line',
-    data:{
-      labels:data.labels,
-      datasets:SERIES.map(s=>({label:s.label,data:data[s.key],borderColor:s.color,borderWidth:2,pointRadius:3,tension:.35,fill:false}))
-    },
+    data:{labels:data.labels,datasets:SERIES.map(s=>({label:s.label,data:data[s.key],borderColor:s.color,borderWidth:2,pointRadius:3,tension:.35,fill:false}))},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{size:11}},grid:{display:false}},
-              y:{ticks:{font:{size:11},callback:v=>v+'%'},grid:{color:'rgba(136,135,128,.15)'}}}}
+      scales:{x:{ticks:{font:{size:11}},grid:{display:false}},y:{ticks:{font:{size:11},callback:v=>v+'%'},grid:{color:'rgba(136,135,128,.15)'}}}}
   });
   document.getElementById('trend-legend').innerHTML = SERIES.map(s=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;border-radius:2px;background:${s.color};display:inline-block"></span>${s.label}</span>`).join('');
 }
-function switchTrend(mode, btn){
+function switchTrend(mode,btn){
   document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   buildTrendChart(mode==='dod'?TREND_DOD:TREND_WOW);
 }
 
-/* ── REASONS ── */
-function renderReasons(id, data, color){
-  const max = data[0].count;
-  document.getElementById(id).innerHTML = data.map(r=>`
-    <div class="obj-row">
-      <div class="obj-lbl">${r.reason}</div>
-      <div class="obj-bw"><div class="obj-b" style="width:${Math.round(r.count/max*100)}%;background:${color}"></div></div>
-      <div class="obj-c">${r.count.toLocaleString('en-IN')}</div>
-    </div>`).join('');
+/* REASONS */
+function renderReasons(id,data,color){
+  const max=data[0].count;
+  document.getElementById(id).innerHTML=data.map(r=>`<div class="obj-row">
+    <div class="obj-lbl">${r.reason}</div>
+    <div class="obj-bw"><div class="obj-b" style="width:${Math.round(r.count/max*100)}%;background:${color}"></div></div>
+    <div class="obj-c">${r.count.toLocaleString('en-IN')}</div>
+  </div>`).join('');
 }
 
-/* ── OBJECTIONS ── */
+/* OBJECTIONS */
 function renderObjections(){
-  const max = OBJECTIONS[0].count;
-  document.getElementById('obj-wrap').innerHTML = OBJECTIONS.map(o=>`
-    <div class="obj-row">
-      <div class="obj-lbl">${o.reason}</div>
-      <div class="obj-bw"><div class="obj-b" style="width:${Math.round(o.count/max*100)}%"></div></div>
-      <div class="obj-c">${o.count.toLocaleString('en-IN')}</div>
-    </div>`).join('');
+  const max=OBJECTIONS[0].count;
+  document.getElementById('obj-wrap').innerHTML=OBJECTIONS.map(o=>`<div class="obj-row">
+    <div class="obj-lbl">${o.reason}</div>
+    <div class="obj-bw"><div class="obj-b" style="width:${Math.round(o.count/max*100)}%"></div></div>
+    <div class="obj-c">${o.count.toLocaleString('en-IN')}</div>
+  </div>`).join('');
 }
 
-/* ── DURATION CHART ── */
+/* DURATION CHART */
 function renderDurationChart(){
-  const dur = DURATION_BY_OUTCOME;
   new Chart(document.getElementById('durationChart'),{
     type:'bar',
-    data:{labels:dur.map(d=>d.label),datasets:[{label:'Avg secs',data:dur.map(d=>d.secs),backgroundColor:dur.map(d=>d.color),borderWidth:0,borderRadius:3}]},
+    data:{labels:DURATION_BY_OUTCOME.map(d=>d.label),datasets:[{label:'Avg secs',data:DURATION_BY_OUTCOME.map(d=>d.secs),backgroundColor:DURATION_BY_OUTCOME.map(d=>d.color),borderWidth:0,borderRadius:3}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.parsed.x}s avg`}}},
       scales:{x:{ticks:{font:{size:11},callback:v=>v+'s'},grid:{color:'rgba(136,135,128,.15)'}},y:{ticks:{font:{size:11}},grid:{display:false}}}}
   });
 }
 
-/* ── SENTIMENT ── */
+/* SENTIMENT */
 function renderSentiment(){
-  const total_pos = SENTIMENT_COHORT.reduce((a,c)=>a+c.pos,0)/SENTIMENT_COHORT.length;
-  const total_neu = SENTIMENT_COHORT.reduce((a,c)=>a+c.neu,0)/SENTIMENT_COHORT.length;
-  const total_neg = SENTIMENT_COHORT.reduce((a,c)=>a+c.neg,0)/SENTIMENT_COHORT.length;
+  const avg_pos=SENTIMENT_COHORT.reduce((a,c)=>a+c.pos,0)/SENTIMENT_COHORT.length;
+  const avg_neu=SENTIMENT_COHORT.reduce((a,c)=>a+c.neu,0)/SENTIMENT_COHORT.length;
+  const avg_neg=SENTIMENT_COHORT.reduce((a,c)=>a+c.neg,0)/SENTIMENT_COHORT.length;
   new Chart(document.getElementById('sentChart'),{
     type:'doughnut',
-    data:{labels:['Positive','Neutral','Negative'],datasets:[{data:[total_pos,total_neu,total_neg],backgroundColor:['#639922','#b4b2a9','#e24b4a'],borderWidth:0}]},
+    data:{labels:['Positive','Neutral','Negative'],datasets:[{data:[avg_pos,avg_neu,avg_neg],backgroundColor:['#639922','#b4b2a9','#e24b4a'],borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed.toFixed(1)}%`}}}}
   });
   document.getElementById('sent-leg').innerHTML=[
-    {l:'Positive',c:'#639922',v:total_pos},{l:'Neutral',c:'#b4b2a9',v:total_neu},{l:'Negative',c:'#e24b4a',v:total_neg}
+    {l:'Positive',c:'#639922',v:avg_pos},{l:'Neutral',c:'#b4b2a9',v:avg_neu},{l:'Negative',c:'#e24b4a',v:avg_neg}
   ].map(x=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${x.c};display:inline-block"></span>${x.l} ${x.v.toFixed(1)}%</span>`).join('');
-
-  document.getElementById('sent-cohort-body').innerHTML = SENTIMENT_COHORT.map(c=>`<tr>
+  document.getElementById('sent-cohort-body').innerHTML=SENTIMENT_COHORT.map(c=>`<tr>
     <td style="font-weight:500">${c.name}</td>
     <td style="color:#3b6d11;font-weight:500">${c.pos}%</td>
     <td style="color:#888780">${c.neu}%</td>
     <td style="color:#a32d2d">${c.neg}%</td>
-    <td style="min-width:80px"><div class="rsbar"><div style="width:${c.pos}%;background:#639922"></div><div style="width:${c.neu}%;background:#b4b2a9"></div><div style="width:${c.neg}%;background:#e24b4a"></div></div></td>
+    <td><div class="rsbar"><div style="width:${c.pos}%;background:#639922"></div><div style="width:${c.neu}%;background:#b4b2a9"></div><div style="width:${c.neg}%;background:#e24b4a"></div></div></td>
   </tr>`).join('');
 }
 
-/* ── INIT ── */
 renderFunnel();
+renderInboundFunnel();
 renderCohortKPI();
 buildTrendChart(TREND_DOD);
-renderReasons('interest-reasons', INTEREST_REASONS, '#1d9e75');
-renderReasons('notint-reasons', NOTINT_REASONS, '#e24b4a');
+renderReasons('interest-reasons',INTEREST_REASONS,'#1d9e75');
+renderReasons('notint-reasons',NOTINT_REASONS,'#e24b4a');
 renderObjections();
 renderDurationChart();
 renderSentiment();
