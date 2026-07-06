@@ -181,11 +181,17 @@ tr:last-child td{border-bottom:none}
     <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--text3);flex-wrap:wrap" id="trend-legend"></div>
   </div>
 
-  <!-- REASONS -->
-  <div class="sec">Reasons — outcome detail</div>
+  <!-- DISPOSITIONS -->
+  <div class="sec">Dispositions</div>
   <div class="two-col">
-    <div class="cc" style="margin-bottom:0"><h3>Interest reasons</h3><div id="interest-reasons"></div></div>
-    <div class="cc" style="margin-bottom:0"><h3>Not interested reasons</h3><div id="notint-reasons"></div></div>
+    <div class="cc" style="margin-bottom:0">
+      <h3>Not concluded — why</h3>
+      <div id="not-concluded-disp"></div>
+    </div>
+    <div class="cc" style="margin-bottom:0">
+      <h3>Not interested — why</h3>
+      <div id="not-interested-disp"></div>
+    </div>
   </div>
 
   <!-- KEY OBJECTIONS -->
@@ -259,18 +265,30 @@ tr:last-child td{border-bottom:none}
 document.getElementById('today-label').textContent = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 
 const OUTBOUND_FUNNEL = [
-  {stage:'Calling base',  count:15200, color:'#5a87c5', tc:'#fff', sep:false},
-  {stage:'Total dials',   count:13800, color:'#378add', tc:'#fff', sep:false},
-  {stage:'Unique dials',  count:11940, color:'#185fa5', tc:'#fff', sep:false},
-  {stage:'Connected',     count:8470,  color:'#1d9e75', tc:'#fff', sep:true},
-  {stage:'Not connected', count:5330,  color:'#e24b4a', tc:'#fff', sep:false},
-  {stage:'Concluded',     count:3617,  color:'#3b6d11', tc:'#fff', sep:true},
-  {stage:'Not concluded', count:4853,  color:'#ba7517', tc:'#fff', sep:false},
-  {stage:'· Call drop',   count:1210,  color:'#d85a30', tc:'#fff', sep:false},
-  {stage:'· Cust. hung up',count:2104, color:'#ef9f27', tc:'#412402', sep:false},
-  {stage:'· Callback/Busy',count:1539, color:'#fac775', tc:'#412402', sep:false},
-  {stage:'Slot booked',     count:860, color:'#0f6e56', tc:'#fff', sep:true},
-  {stage:'Not interested', count:2757, color:'#b4b2a9', tc:'#2c2c2a', sep:false},
+  {stage:'Calling base',    count:15200, color:'#5a87c5', tc:'#fff', indent:false, sep:false},
+  {stage:'Total dials',     count:13800, color:'#378add', tc:'#fff', indent:false, sep:false},
+  {stage:'Unique dials',    count:11940, color:'#185fa5', tc:'#fff', indent:false, sep:false},
+  {stage:'Connected',       count:8470,  color:'#1d9e75', tc:'#fff', indent:false, sep:true},
+  {stage:'Not connected',   count:5330,  color:'#e24b4a', tc:'#fff', indent:false, sep:false},
+  {stage:'Concluded',       count:3617,  color:'#3b6d11', tc:'#fff', indent:false, sep:true},
+  {stage:'· Interested',    count:860,   color:'#0f6e56', tc:'#fff', indent:true,  sep:false},
+  {stage:'· Not interested',count:2757,  color:'#b4b2a9', tc:'#2c2c2a',indent:true,sep:false},
+  {stage:'Not concluded',   count:4853,  color:'#ba7517', tc:'#fff', indent:false, sep:false},
+];
+
+const NOT_CONCLUDED_DISPOSITIONS = [
+  {label:'Customer hung up', count:2104, color:'#ef9f27'},
+  {label:'Callback / user busy', count:1539, color:'#ba7517'},
+  {label:'Call drop', count:1210, color:'#d85a30'},
+];
+
+const NOT_INTERESTED_DISPOSITIONS = [
+  {label:'Already has broadband', count:842},
+  {label:'Price too high', count:610},
+  {label:'Not the right time', count:503},
+  {label:'Spouse / family decides', count:388},
+  {label:'Area not serviceable', count:271},
+  {label:'No need right now', count:143},
 ];
 
 const INBOUND_FUNNEL = [
@@ -353,12 +371,14 @@ function renderFunnel(){
   const max = OUTBOUND_FUNNEL[0].count;
   document.getElementById('funnel-wrap').innerHTML = OUTBOUND_FUNNEL.map((r,i)=>{
     const pct = Math.round(r.count/max*100);
-    const majorRows = OUTBOUND_FUNNEL.filter((_,j)=>j<i&&!OUTBOUND_FUNNEL[j].stage.startsWith('·'));
-    const lastMajor = majorRows.length ? majorRows[majorRows.length-1] : null;
-    const drop = lastMajor && !r.stage.startsWith('·') ? Math.round((1-r.count/lastMajor.count)*100) : null;
-    return `${r.sep?'<div class="fsep"></div>':''}<div class="funnel-row">
-      <div class="flbl">${r.stage}</div>
-      <div class="fbar-wrap"><div class="fbar" style="width:${pct}%;background:${r.color}"><span class="fcount" style="color:${r.tc}">${r.count.toLocaleString('en-IN')}</span></div></div>
+    const majorRows = OUTBOUND_FUNNEL.filter((_,j)=>j<i&&!r.indent);
+    const lastMajor = !r.indent ? (OUTBOUND_FUNNEL.filter((_,j)=>j<i&&!OUTBOUND_FUNNEL[j].indent).slice(-1)[0]||null) : null;
+    const drop = lastMajor ? Math.round((1-r.count/lastMajor.count)*100) : null;
+    const lpad = r.indent ? 'padding-left:20px' : '';
+    const height = r.indent ? '24px' : '30px';
+    return `${r.sep?'<div class="fsep"></div>':''}<div class="funnel-row" style="${lpad}">
+      <div class="flbl" style="font-size:${r.indent?'11px':'12px'};color:${r.indent?'var(--text2)':'var(--text3)'}">${r.stage}</div>
+      <div class="fbar-wrap" style="height:${height}"><div class="fbar" style="width:${pct}%;background:${r.color};height:100%"><span class="fcount" style="color:${r.tc};font-size:${r.indent?'11px':'12px'}">${r.count.toLocaleString('en-IN')}</span></div></div>
       <div class="fdrop">${drop!==null&&drop>0?`-${drop}%`:''}</div>
     </div>`;
   }).join('');
@@ -412,7 +432,30 @@ function switchTrend(mode,btn){
   buildTrendChart(mode==='dod'?TREND_DOD:TREND_WOW);
 }
 
-/* REASONS */
+/* DISPOSITIONS */
+function renderNotConcludedDisp(){
+  const total = NOT_CONCLUDED_DISPOSITIONS.reduce((a,d)=>a+d.count,0);
+  const max = NOT_CONCLUDED_DISPOSITIONS[0].count;
+  document.getElementById('not-concluded-disp').innerHTML = NOT_CONCLUDED_DISPOSITIONS.map(d=>`
+    <div class="obj-row">
+      <div class="obj-lbl">${d.label}</div>
+      <div class="obj-bw"><div class="obj-b" style="width:${Math.round(d.count/max*100)}%;background:${d.color}"></div></div>
+      <div class="obj-c" style="color:var(--text3)">${d.count.toLocaleString('en-IN')} <span style="font-size:10px">(${Math.round(d.count/total*100)}%)</span></div>
+    </div>`).join('');
+}
+
+function renderNotInterestedDisp(){
+  const max = NOT_INTERESTED_DISPOSITIONS[0].count;
+  const total = NOT_INTERESTED_DISPOSITIONS.reduce((a,d)=>a+d.count,0);
+  document.getElementById('not-interested-disp').innerHTML = NOT_INTERESTED_DISPOSITIONS.map(d=>`
+    <div class="obj-row">
+      <div class="obj-lbl">${d.label}</div>
+      <div class="obj-bw"><div class="obj-b" style="width:${Math.round(d.count/max*100)}%;background:#b4b2a9"></div></div>
+      <div class="obj-c" style="color:var(--text3)">${d.count.toLocaleString('en-IN')} <span style="font-size:10px">(${Math.round(d.count/total*100)}%)</span></div>
+    </div>`).join('');
+}
+
+/* REASONS (kept for interest reasons section) */
 function renderReasons(id,data,color){
   const max=data[0].count;
   document.getElementById(id).innerHTML=data.map(r=>`<div class="obj-row">
@@ -468,8 +511,8 @@ renderFunnel();
 renderInboundFunnel();
 renderCohortKPI();
 buildTrendChart(TREND_DOD);
-renderReasons('interest-reasons',INTEREST_REASONS,'#1d9e75');
-renderReasons('notint-reasons',NOTINT_REASONS,'#e24b4a');
+renderNotConcludedDisp();
+renderNotInterestedDisp();
 renderObjections();
 renderDurationChart();
 renderSentiment();
