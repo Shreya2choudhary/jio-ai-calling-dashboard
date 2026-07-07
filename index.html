@@ -369,40 +369,24 @@ const SENTIMENT_COHORT = [
 /* OUTBOUND FUNNEL */
 function renderFunnel(){
   const max = OUTBOUND_FUNNEL[0].count;
-  const interested   = OUTBOUND_FUNNEL.find(r=>r.stage==='· Interested');
-  const notInterested= OUTBOUND_FUNNEL.find(r=>r.stage==='· Not interested');
-  const concluded    = OUTBOUND_FUNNEL.find(r=>r.stage==='Concluded');
-
-  const majorRows = OUTBOUND_FUNNEL.filter(r=>!r.indent);
-  document.getElementById('funnel-wrap').innerHTML = majorRows.map((r,i)=>{
+  const concluded = OUTBOUND_FUNNEL.find(r=>r.stage==='Concluded');
+  document.getElementById('funnel-wrap').innerHTML = OUTBOUND_FUNNEL.map((r,i)=>{
     const pct = Math.round(r.count/max*100);
-    const prev = majorRows[i-1]||null;
-    const drop = prev ? Math.round((1-r.count/prev.count)*100) : null;
-
-    if(r.stage==='Concluded'){
-      const intPct  = Math.round(interested.count/concluded.count*100);
-      const notPct  = 100-intPct;
-      return `<div class="fsep"></div><div class="funnel-row">
-        <div class="flbl">Concluded</div>
-        <div style="flex:1">
-          <div class="fbar-wrap" style="height:30px;display:flex;overflow:hidden;border-radius:4px">
-            <div style="width:${pct*intPct/100}%;background:#0f6e56;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;flex-shrink:0">
-              <span style="font-size:11px;font-weight:500;color:#fff;white-space:nowrap">Interested ${interested.count.toLocaleString('en-IN')}</span>
-            </div>
-            <div style="width:${pct*notPct/100}%;background:#b4b2a9;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;flex-shrink:0">
-              <span style="font-size:11px;font-weight:500;color:#2c2c2a;white-space:nowrap">Not interested ${notInterested.count.toLocaleString('en-IN')}</span>
-            </div>
-            <div style="flex:1;background:var(--bg2)"></div>
+    const prev = OUTBOUND_FUNNEL.filter((_,j)=>j<i&&!OUTBOUND_FUNNEL[j].indent).slice(-1)[0]||null;
+    const drop = !r.indent && prev ? Math.round((1-r.count/prev.count)*100) : null;
+    const parentPct = r.indent ? Math.round(concluded.count/max*100) : null;
+    const subPct = r.indent ? Math.round(r.count/concluded.count*100) : null;
+    return `${(r.sep&&!r.indent)?'<div class="fsep"></div>':''}
+    <div class="funnel-row" style="${r.indent?'padding-left:16px;margin-bottom:4px':''}">
+      <div class="flbl" style="font-size:${r.indent?'11px':'12px'};color:${r.indent?'var(--text2)':'var(--text3)'}">${r.stage}</div>
+      <div style="flex:1;position:relative">
+        ${r.indent?`<div style="position:absolute;left:0;top:0;width:${parentPct}%;height:100%;background:var(--bg2);border-radius:4px"></div>`:''}
+        <div class="fbar-wrap" style="height:${r.indent?'22px':'30px'};background:transparent">
+          <div class="fbar" style="width:${r.indent?subPct+'%':''+pct+'%'};background:${r.color};height:100%;position:relative;z-index:1;margin-left:${r.indent?'0':'0'}">
+            <span class="fcount" style="color:${r.tc};font-size:${r.indent?'11px':'12px'}">${r.count.toLocaleString('en-IN')} ${r.indent?`<span style="font-size:10px;opacity:0.85">(${subPct}%)</span>`:''}</span>
           </div>
-          <div style="font-size:10px;color:var(--text3);margin-top:3px;padding-left:2px">Total concluded: ${concluded.count.toLocaleString('en-IN')} · ${intPct}% interested · ${notPct}% not interested</div>
         </div>
-        <div class="fdrop">${drop!==null&&drop>0?`-${drop}%`:''}</div>
-      </div>`;
-    }
-
-    return `${(r.sep&&i>0)?'<div class="fsep"></div>':''}<div class="funnel-row">
-      <div class="flbl">${r.stage}</div>
-      <div class="fbar-wrap"><div class="fbar" style="width:${pct}%;background:${r.color}"><span class="fcount" style="color:${r.tc}">${r.count.toLocaleString('en-IN')}</span></div></div>
+      </div>
       <div class="fdrop">${drop!==null&&drop>0?`-${drop}%`:''}</div>
     </div>`;
   }).join('');
